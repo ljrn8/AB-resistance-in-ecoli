@@ -1,0 +1,14 @@
+=======================================
+PROCESSING: 0, ERR434268
+downloading pairwize 1
+downloading pairwize 2
+--- STARTING ALINGMENT ---
+alingment complete
+--- SORTING ---
+sorting complete\n
+--- INDEXING ---
+indexing complete
+--- VARIANT CALLING ---
+=======================================
+PROCESSING: 1, ERR434269
+downloading pairwize 1
