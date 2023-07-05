@@ -3,5 +3,5 @@ results/*
 
 # only keep the snps in github ?
 !results/snps/*
-!raw_data 
-!results
+!raw_data/
+!results/
