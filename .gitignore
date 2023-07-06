@@ -1,7 +1,3 @@
 raw_data/*
 results/*
 
-# only keep the snps in github ?
-!results/
-!raw_data/
-!results/
