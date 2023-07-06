@@ -1,0 +1,7 @@
+⚠️ overriding results/snps/ERR434268_snps.txt
+
+============================================
+	PROCESSING: ERR434268, -f
+============================================
+🔄 downloading pairwize 1
+🔄 downloading pairwize 2

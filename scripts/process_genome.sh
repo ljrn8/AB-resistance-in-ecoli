@@ -1,44 +1,82 @@
+#!/bin/bash
 
-# TODO bcf is for binary call format, consider vcf --gzvfc in gh
-# TODO print analytics
+# TODO print more analytics
 # TODO delete inside raw_data/
 
-ACCESSION=$1
+cd ..
+
+
+# TODO override flag
+ACCESSION=$2
+i=$3
+
 SHORT=${ACCESSION:0:6}
-i=$2
+OVERRIDE=0
+SNP_FILE="results/snps/${i}_snps.txt"
 
-echo "======================================="
-echo "PROCESSING: ${i}, ${ACCESSION}"
+mkdir -p logs raw_data results results/snps;
 
-echo "downloading pairwize 1"
-wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_1.fastq.gz -P ../raw_data/
-echo "downloading pairwize 2"
-wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_2.fastq.gz -P ../raw_data/
-gzip -d raw_data/*
+while getopts "f" flag; do
+    case "$flag" in
+        f) 
+            echo "⚠️ overriding ${SNP_FILE}"
+            OVERRIDE=1
+            ;;
+    esac
+done
+
+if [ -f $SNP_FILE ] && [ $OVERRIDE -eq 0 ]; then
+    echo "${SNP_FILE} already exists, run with -f to override snp files"
+    exit 0
+fi
+
+printf "\n============================================\n"
+printf "\tPROCESSING: ${i}, ${ACCESSION}\n"
+printf "============================================\n"
+
+### DOWNLOADING ###
+echo "🔄 downloading pairwize 1"
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_1.fastq.gz -P raw_data/
+echo "🔄 downloading pairwize 2"
+wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_2.fastq.gz -P raw_data/
+echo "🔄 decompressing"
+yes n | gzip -d raw_data/* 
 
 
-echo "STARTING ALINGMENT ..."
-bwa mem -M -t 2 -R \
-    reference_data/ecoli_reference_k12 \
-    raw_data/${ACCESSION}_2.fastq raw_data/${ACCESSION}_1.fastq \
-    | samtools view -Sb - > results/${i}.bam 
+### ALINGMENT ###
+if [ -f "results/${i}.bam" ] && [ -f "results/${i}_sorted.bam" ] &&  [ -f "results/${i}_sorted.bam.bai" ]; then 
+    echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
+else
+    echo "🔄 aligning"
+    bwa mem -M -t 2 \
+        reference_data/ecoli_reference_k12 \
+        raw_data/${ACCESSION}_2.fastq raw_data/${ACCESSION}_1.fastq \
+        | samtools view -bS > results/${i}.bam;
 
+    echo "🔄 sorting"
+    samtools sort results/${i}.bam -O bam -o results/${i}_sorted.bam
 
-echo "SORTING ..."
-samtools sort ../results/${i}.bam -O bam -o ../results/${i}_sorted.bam
+    echo "🔄 indexing"
+    samtools index results/${i}_sorted.bam
+fi
 
-echo "INDEXING ..."
-samtools index ../results/${i}_sorted.bam
+### VARIANT CALLING ###
+if [ -f "results/${i}_calls.vcf.gz" ]; then 
+    echo "⚠️ variant calls already exist for ${i}_calls.vcf.gz, skipping .."
+else
+    echo "🔄 variant calling"
+    bcftools mpileup --max-depth 500 -f reference_data/ecoli_reference_k12.fasta results/${i}_sorted.bam \
+        | bcftools call -vm -Oz > results/${i}_calls.vcf.gz;
+fi
 
-echo "VARIANT CALLING ..."
-bcftools mpileup --max-depth 500 -f \
-    reference_data/ecoli_reference_k12.fasta results/${i}_sorted.bam 
-    | bcftools call -vm -Oz > results/${i}_calls.vcf.gz
+echo "🔄 vcf cleaning"
+bcftools view -Oz -e 'QUAL <= 20 || DP > 250 || MQBZ < -3 || RPBZ < -3 || RPBZ > 3 || SCBZ > 6' \
+    results/${i}_calls.vcf.gz > results/${i}_filtered.vcf.gz
 
-echo "VCF CLEANING ..."
-bcftools view -e 'QUAL <= 20 || DP > 250 || MQBZ < -3 || RPBZ < -3 || RPBZ > 3 || || SCBZ > 6' ${i}_calls.vcf > filtered.vcf
+echo "🔄 collecting snps"
+bcftools query "-i" 'TYPE="SNP"' -f '%POS %REF %ALT\n' results/${i}_filtered.vcf.gz > "$SNP_FILE"
 
-echo "COLLECTING SNPS ..."
-bcftools query -i 'TYPE="SNP"' -f '%POS %REF %ALT\n' ${i}_calls.vcf > ${i}_snps
+echo "number of snps: "
+wc -l $SNP_FILE;
 
-echo "======================================="
+printf "\n";

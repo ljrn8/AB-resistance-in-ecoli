@@ -1,0 +1,22 @@
+results/snps/0_snps.txt already exists, run with -f to override snp files
+
+============================================
+	PROCESSING: 1, ERR434269
+============================================
+🔄 downloading pairwize 1
+🔄 downloading pairwize 2
+🔄 decompressing
+🔄 aligning
+🔄 sorting
+🔄 indexing
+⚠️ variant calls already exist for 1_calls.vcf.gz, skipping ..
+🔄 vcf cleaning
+🔄 collecting snps
+number of snps: 
+0 results/snps/1_snps.txt
+
+
+============================================
+	PROCESSING: 2, ERR434270
+============================================
+🔄 downloading pairwize 1

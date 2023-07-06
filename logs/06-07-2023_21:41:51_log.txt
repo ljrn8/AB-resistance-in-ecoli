@@ -1,0 +1,16 @@
+
+============================================
+	PROCESSING: , 0
+============================================
+🔄 downloading pairwize 1
+🔄 downloading pairwize 2
+🔄 decompressing
+🔄 aligning
+🔄 sorting
+🔄 indexing
+🔄 variant calling
+🔄 vcf cleaning
+🔄 collecting snps
+number of snps: 
+0 results/snps/_snps.txt
+
