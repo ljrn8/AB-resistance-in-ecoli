@@ -15,8 +15,6 @@ def main(
     now = datetime.now()
     now_str = now.strftime("%d-%m-%Y_%H:%M:%S")
     df = pd.read_csv("../accessions.csv")
-    
-    
     log_file = f"../logs/{now_str}_log.txt"
     
     # just do 5 for now

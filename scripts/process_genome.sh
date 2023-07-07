@@ -5,7 +5,6 @@
 
 cd ..
 
-
 ACCESSION=$1
 i=$2
 OVERWRITE=$3
@@ -14,12 +13,6 @@ SHORT=${ACCESSION:0:6}
 SNP_FILE="results/snps/${i}_snps.txt"
 
 mkdir -p logs raw_data results results/snps;
-
-# stop if i_snps.txt already exists
-if [[ "$OVERRIDE" = "False" ]]; then 
-    echo "this"
-fi
-
 
 if [[ -f "${SNP_FILE}" ]] && [[ "$OVERWRITE" = "False" ]]; then
     echo "⚠️ ${SNP_FILE} already exists, skipping this genome .."
