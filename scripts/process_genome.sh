@@ -6,27 +6,23 @@
 cd ..
 
 
-# TODO override flag
-ACCESSION=$2
-i=$3
+ACCESSION=$1
+i=$2
+OVERWRITE=$3
 
 SHORT=${ACCESSION:0:6}
-OVERRIDE=0
 SNP_FILE="results/snps/${i}_snps.txt"
 
 mkdir -p logs raw_data results results/snps;
 
-while getopts "f" flag; do
-    case "$flag" in
-        f) 
-            echo "⚠️ overriding ${SNP_FILE}"
-            OVERRIDE=1
-            ;;
-    esac
-done
+# stop if i_snps.txt already exists
+if [[ "$OVERRIDE" = "False" ]]; then 
+    echo "this"
+fi
 
-if [ -f $SNP_FILE ] && [ $OVERRIDE -eq 0 ]; then
-    echo "${SNP_FILE} already exists, run with -f to override snp files"
+
+if [[ -f "${SNP_FILE}" ]] && [[ "$OVERWRITE" = "False" ]]; then
+    echo "⚠️ ${SNP_FILE} already exists, skipping this genome .."
     exit 0
 fi
 
@@ -35,17 +31,25 @@ printf "\tPROCESSING: ${i}, ${ACCESSION}\n"
 printf "============================================\n"
 
 ### DOWNLOADING ###
-echo "🔄 downloading pairwize 1"
-wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_1.fastq.gz -P raw_data/
-echo "🔄 downloading pairwize 2"
-wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_2.fastq.gz -P raw_data/
-echo "🔄 decompressing"
-yes n | gzip -d raw_data/* 
-
+cd raw_data;
+if [[ -f ${ACCESSION}_1.fastq ]] && [[ -f ${ACCESSION}_2.fastq ]] && [[ "$OVERWRITE" = "False" ]]; then
+    echo "⚠️ fastq files ${ACCESSION}_x.fastq already exist, skipping .."
+else
+    echo "🔄 downloading pairwize 1"
+    wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_1.fastq.gz
+    echo "🔄 downloading pairwize 2"
+    wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_2.fastq.gz
+    echo "🔄 decompressing"
+    yes n | gzip -d * 
+fi
+cd ..;
 
 ### ALINGMENT ###
-if [ -f "results/${i}.bam" ] && [ -f "results/${i}_sorted.bam" ] &&  [ -f "results/${i}_sorted.bam.bai" ]; then 
-    echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
+if [[ -f "results/${i}.bam" ]] && \ 
+    [[ -f "results/${i}_sorted.bam" ]] && \ 
+    [[ -f "results/${i}_sorted.bam.bai" ]] && \
+    [[ "$OVERWRITE" = "False" ]]; then 
+echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
 else
     echo "🔄 aligning"
     bwa mem -M -t 2 \
@@ -61,7 +65,7 @@ else
 fi
 
 ### VARIANT CALLING ###
-if [ -f "results/${i}_calls.vcf.gz" ]; then 
+if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" = "False" ]]; then 
     echo "⚠️ variant calls already exist for ${i}_calls.vcf.gz, skipping .."
 else
     echo "🔄 variant calling"
@@ -79,4 +83,5 @@ bcftools query "-i" 'TYPE="SNP"' -f '%POS %REF %ALT\n' results/${i}_filtered.vcf
 echo "number of snps: "
 wc -l $SNP_FILE;
 
-printf "\n";
+printf "waiting 3 seconds before nect genome .. \n";
+sleep 3

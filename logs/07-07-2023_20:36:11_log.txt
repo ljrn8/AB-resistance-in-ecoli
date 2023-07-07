@@ -1,0 +1,10 @@
+DEBUG; this is ovewrote: False
+⚠️ overwriting files
+
+============================================
+	PROCESSING: 0, ERR434268
+============================================
+🔄 downloading pairwize 1
+🔄 downloading pairwize 2
+🔄 decompressing
+🔄 aligning
