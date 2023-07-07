@@ -1,9 +1,0 @@
-
-============================================
-	PROCESSING: 0, ERR434268
-============================================
-🔄 downloading pairwize 1
-🔄 downloading pairwize 2
-🔄 decompressing
-⚠️ alingmnet file results/0.bam already exists, skipping alingment
-🔄 sorting

@@ -4,7 +4,9 @@ import time
 from datetime import datetime
 import os, sys
 
-# multi threading?
+# TODO can be done with 3 threads
+# look at AWS genomics & azure
+# multi threading
 # 2118482 A C,G
 
 
@@ -16,6 +18,9 @@ def main(
     now_str = now.strftime("%d-%m-%Y_%H:%M:%S")
     df = pd.read_csv("../accessions.csv")
     log_file = f"../logs/{now_str}_log.txt"
+    
+    
+    
     
     # just do 5 for now
     for i in indexes:
@@ -33,13 +38,11 @@ def main(
             print(f"non zero exit code from sub process {i}")
             return 
         
-        snp_file = f'../results/snps/{i}_snps.txt'
+        snp_file = f'../results/variants/{i}_snps.txt'
         if not os.path.exists(snp_file):
             print(f"snp file [{i}_snps] doesnt exists, assuming error")
             return
         
-        print("waiting 3 second before next genome ... \n\n")
-        time.sleep(3)
 
 
 if __name__ =="__main__":

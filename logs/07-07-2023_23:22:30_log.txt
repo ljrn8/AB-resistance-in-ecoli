@@ -1,0 +1,5 @@
+⚠️ results/variants/0_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/1_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/2_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/3_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/4_snps.txt already exists, skipping this genome ..

@@ -1,0 +1,21 @@
+⚠️ results/snps/0_snps.txt already exists, skipping this genome ..
+⚠️ results/snps/1_snps.txt already exists, skipping this genome ..
+⚠️ results/snps/2_snps.txt already exists, skipping this genome ..
+
+============================================
+	PROCESSING: 3, ERR434271
+============================================
+🔄 downloading pairwize 1
+🔄 downloading pairwize 2
+🔄 decompressing
+🔄 aligning
+🔄 sorting
+🔄 indexing
+🔄 variant calling
+🔄 vcf cleaning
+🔄 collecting snps
+🔄 collecting indels
+0 results/snps/3_snps.txt
+0 results/snps/3_indels.txt
+total time taken: 0min 0s
+waiting 3 seconds before nect genome .. 

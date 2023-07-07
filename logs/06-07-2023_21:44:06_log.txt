@@ -1,2 +1,0 @@
-results/snps/0_snps.txt already exists, run with -f to override snp files
-results/snps/1_snps.txt already exists, run with -f to override snp files

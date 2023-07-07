@@ -1,0 +1,23 @@
+this script downloads all genomes and may take few hours.         
+if you have cloned this repo and curious about its function, make sure to not ever run multiple instances of this program at once
+Are you sure you want to proceed [Y/N]: ⚠️ results/variants/0_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/1_snps.txt already exists, skipping this genome ..
+
+============================================
+	PROCESSING: 2, ERR434270
+============================================
+🔄 downloading pairwize 1
+File ‘ERR434270_1.fastq.gz’ already there; not retrieving.
+
+real	0m0.004s
+user	0m0.004s
+sys	0m0.000s
+🔄 downloading pairwize 2
+--2023-07-07 22:58:13--  ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR434/ERR434270/ERR434270_2.fastq.gz
+           => ‘ERR434270_2.fastq.gz’
+Resolving ftp.sra.ebi.ac.uk (ftp.sra.ebi.ac.uk)... 193.62.193.138
+Connecting to ftp.sra.ebi.ac.uk (ftp.sra.ebi.ac.uk)|193.62.193.138|:21... connected.
+Logging in as anonymous ... Logged in!
+==> SYST ... done.    ==> PWD ... done.
+==> TYPE I ... done.  ==> CWD (1) /vol1/fastq/ERR434/ERR434270 ... done.
+==> SIZE ERR434270_2.fastq.gz ... 

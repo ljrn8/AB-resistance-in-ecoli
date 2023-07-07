@@ -1,4 +1,4 @@
-results/snps/0_snps.txt already exists, run with -f to override snp files
+⚠️ results/variants/0_snps.txt already exists, skipping this genome ..
 
 ============================================
 	PROCESSING: 1, ERR434269
@@ -9,12 +9,14 @@ results/snps/0_snps.txt already exists, run with -f to override snp files
 🔄 aligning
 🔄 sorting
 🔄 indexing
-⚠️ variant calls already exist for 1_calls.vcf.gz, skipping ..
+🔄 variant calling
 🔄 vcf cleaning
 🔄 collecting snps
-number of snps: 
-0 results/snps/1_snps.txt
-
+🔄 collecting indels
+0 results/variants/1_snps.txt
+0 results/variants/1_indels.txt
+total time taken: 0min 4s
+waiting 3 seconds before nect genome .. 
 
 ============================================
 	PROCESSING: 2, ERR434270
