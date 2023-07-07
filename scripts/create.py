@@ -20,8 +20,6 @@ def main(
     log_file = f"../logs/{now_str}_log.txt"
     
     
-    
-    
     # just do 5 for now
     for i in indexes:
         accession = df["Lane.accession"].iloc[i]
