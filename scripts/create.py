@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 import os, sys
 
-# TODO can be done with 3 threads
+# TODO can be done with maximum 3 threads
 # 2118482 A C,G
 
 
