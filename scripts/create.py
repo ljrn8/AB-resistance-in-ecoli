@@ -7,7 +7,6 @@ import os, sys
 # TODO can be done with maximum 3 threads
 # 2118482 A C,G
 
-
 def main(
     overwrite=False,
     indexes=range(5)
@@ -55,8 +54,6 @@ if __name__ =="__main__":
     overwrite = args["overwrite"]
     if overwrite:
         print("⚠️ overwriting files '-o'")
-
-
 
     index_range = range(start, end)
     print(f'(using index range {index_range}')

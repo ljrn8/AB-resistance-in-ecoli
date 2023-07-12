@@ -48,6 +48,7 @@ else
 fi
 cd ..
 
+
 ### ALINGMENT ###
 if [[ -f "results/${i}.bam" ]] && \ 
     [[ -f "results/${i}_sorted.bam" ]] && \ 
@@ -68,6 +69,10 @@ else
     time samtools index results/${i}_sorted.bam
 fi
 
+rm raw_data/${accession}*
+echo "⚠️ fastq raw data shoule be removed, looking at fastq: "
+ls -l raw_data
+
 ### VARIANT CALLING ###
 if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" == "False" ]]; then 
     echo "⚠️ variant calls already exist for ${i}_calls.vcf.gz, skipping .."
@@ -80,6 +85,7 @@ fi
 echo "🔄 vcf cleaning [${i}]"
 time bcftools view -Oz -e 'QUAL <= 20 || DP > 250 || MQBZ < -3 || RPBZ < -3 || RPBZ > 3 || SCBZ > 6' \
     results/${i}_calls.vcf.gz > results/${i}_filtered.vcf.gz
+rm results/${i}_calls.vcf.gz
 
 echo "🔄 collecting snps [${i}]"
 time bcftools query "-i" 'TYPE="SNP"' -f '%POS %REF %ALT %QUAL\n' results/${i}_filtered.vcf.gz > "$snp_file"
