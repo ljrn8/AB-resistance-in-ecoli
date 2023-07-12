@@ -45,7 +45,8 @@ if __name__ =="__main__":
     parser.add_argument("-s", "--start", default=0, type=int, help="starting index")
     parser.add_argument("-e", "--ending", default=5, type=int, help="ending index (exclusive)")
     parser.add_argument("-o","--overwrite",action="store_true", help="overwrite all files") 
-    
+    parser.add_argument("-y","--yes",action="store_true", help="skip yessing") 
+
     args = vars(parser.parse_args()) 
     start, end = args["start"], args["ending"]
     if start > end:
@@ -55,6 +56,8 @@ if __name__ =="__main__":
     if overwrite:
         print("⚠️ overwriting files '-o'")
 
+
+
     index_range = range(start, end)
     print(f'(using index range {index_range}')
 
@@ -62,7 +65,7 @@ if __name__ =="__main__":
         \nif you have cloned this repo and curious about its function, make sure to not ever run multiple instances of this program at once")
     
     x = input("Are you sure you want to proceed [Y/N]: ")
-    if x in ['y', 'Y']:
+    if x in ['y', 'Y'] or args["yes"]:
         main(overwrite=overwrite, indexes=index_range)
     else:
         print("execution cancelled")

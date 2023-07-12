@@ -5,3 +5,9 @@ pip3 install pandas
 sudo apt install bwa 
 sudo apt install samtools
 sudo apt install bcftools
+
+# setup systemd service
+cp env_setup /etc/systemd/system/
+sudo systemctl enable ecoli.service 
+sudo systemctl start ecoli.service
+sudo systemctl status ecoli.service

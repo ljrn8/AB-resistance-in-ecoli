@@ -1,0 +1,15 @@
+[Unit] 
+Description=EcoliAppDesc
+After=multi-user.target 
+
+[Service]
+ExecStart=python3 /home/ubuntu/AB-resistance-in-ecoli/scripts/create.py -s 0 -e 531                                                                 
+RestartSec=10 
+StandardOutput=syslog
+StandardError=syslog 
+SyslogIdentifier=ecoli
+User=ubuntu                                                                                  
+
+[Install] 
+WantedBy=multi-user.target 
+ubuntu@ip-172-31-22-11
