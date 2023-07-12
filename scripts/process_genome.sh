@@ -1,50 +1,47 @@
 #!/bin/bash
 
 #############################################################################
-# Script Name:  process_genome <accession> <id> <overwrite?> <logfile>      #
+# Script Name:  process_genome <accession> <id> <overwrite?> <log_file>      #
 # Author:       Joel Hoefs .July 2023                                       #
 # Description:  Downloads, prepares and gathers                             #
 #               a single e.coli genome's variants into results/variants.    #
 #               Designed only to be used through associated python script   #
 #############################################################################
 
-
-# TODO alingement and sort at same time
-
 # special bash variable
 SECONDS=0
 
 cd ..
 
-ACCESSION=$1
+accession=$1
 i=$2
-OVERWRITE=$3
-LOGFILE=$4
+overwrite=$3
+log_file=$4
 
-SHORT=${ACCESSION:0:6}
-SNP_FILE="results/variants/${i}_snps.txt"
-INDEL_FILE="results/variants/${i}_indels.txt"
+short=${accession:0:6}
+snp_file="results/variants/${i}_snps.txt"
+indel_file="results/variants/${i}_indels.txt"
 
 mkdir -p logs raw_data results results/variants;
 
-if [[ -f "${SNP_FILE}" ]] && [[ "$OVERWRITE" = "False" ]]; then
-    echo "⚠️ ${SNP_FILE} already exists, skipping this genome .."
+if [[ -f "${snp_file}" ]] && [[ "$overwrite" = "False" ]]; then
+    echo "⚠️ ${snp_file} already exists, skipping this genome .."
     exit 0
 fi
 
 printf "\n============================================\n"
-printf "\tPROCESSING: ${i}, ${ACCESSION}\n"
+printf "\tPROCESSING: ${i}, ${accession}\n"
 printf "============================================\n"
 
 ### DOWNLOADING ###
 cd raw_data
-if [[ -f ${ACCESSION}_1.fastq ]] && [[ -f ${ACCESSION}_2.fastq ]] && [[ "$OVERWRITE" = "False" ]]; then
-    echo "⚠️ fastq files ${ACCESSION}_x.fastq already exist, skipping .."
+if [[ -f ${accession}_1.fastq ]] && [[ -f ${accession}_2.fastq ]] && [[ "$overwrite" = "False" ]]; then
+    echo "⚠️ fastq files ${accession}_x.fastq already exist, skipping .."
 else
     echo "🔄 downloading pairwize 1 [${i}]"
-    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_1.fastq.gz
+    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_1.fastq.gz
     echo "🔄 downloading pairwize 2 [${i}]"
-    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${SHORT}/${ACCESSION}/${ACCESSION}_2.fastq.gz
+    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_2.fastq.gz
     echo "🔄 decompressing [${i}]"
     time yes n | gzip -d * 
 fi
@@ -54,13 +51,13 @@ cd ..
 if [[ -f "results/${i}.bam" ]] && \ 
     [[ -f "results/${i}_sorted.bam" ]] && \ 
     [[ -f "results/${i}_sorted.bam.bai" ]] && \
-    [[ "$OVERWRITE" = "False" ]]; then 
+    [[ "$overwrite" = "False" ]]; then 
     echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
 else
     echo "🔄 aligning [${i}]"
     time bwa mem -M -t 2 \
         reference_data/ecoli_reference_k12 \
-        raw_data/${ACCESSION}_2.fastq raw_data/${ACCESSION}_1.fastq \
+        raw_data/${accession}_2.fastq raw_data/${accession}_1.fastq \
         | samtools view -bS > results/${i}.bam;
 
     echo "🔄 sorting [${i}]"
@@ -71,7 +68,7 @@ else
 fi
 
 ### VARIANT CALLING ###
-if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" = "False" ]]; then 
+if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$overwrite" = "False" ]]; then 
     echo "⚠️ variant calls already exist for ${i}_calls.vcf.gz, skipping .."
 else
     echo "🔄 variant calling [${i}]"
@@ -84,17 +81,17 @@ time bcftools view -Oz -e 'QUAL <= 20 || DP > 250 || MQBZ < -3 || RPBZ < -3 || R
     results/${i}_calls.vcf.gz > results/${i}_filtered.vcf.gz
 
 echo "🔄 collecting snps [${i}]"
-time bcftools query "-i" 'TYPE="SNP"' -f '%POS %REF %ALT %QUAL\n' results/${i}_filtered.vcf.gz > "$SNP_FILE"
+time bcftools query "-i" 'TYPE="SNP"' -f '%POS %REF %ALT %QUAL\n' results/${i}_filtered.vcf.gz > "$snp_file"
 
 echo "🔄 collecting indels [${i}]"
-time bcftools query "-i" 'TYPE="INDEL"' -f '%POS %REF %ALT %QUAL\n' results/${i}_filtered.vcf.gz > "$INDEL_FILE"
+time bcftools query "-i" 'TYPE="INDEL"' -f '%POS %REF %ALT %QUAL\n' results/${i}_filtered.vcf.gz > "$indel_file"
 
-wc -l $SNP_FILE;
-wc -l $INDEL_FILE;
+wc -l $snp_file;
+wc -l $indel_file;
 
 echo "total time taken: $(($SECONDS / 60))min $(($SECONDS % 60))s"
 
-rm raw_data/${ACCESSION}*
+rm raw_data/${accession}*
 rm results/${i}*
 
 printf "waiting 3 seconds before next genome .. \n";

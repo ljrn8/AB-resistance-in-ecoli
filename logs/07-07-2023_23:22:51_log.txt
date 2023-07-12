@@ -43,3 +43,20 @@ waiting 3 seconds before next genome ..
 🔄 downloading pairwize 2
 🔄 decompressing
 🔄 aligning
+🔄 sorting
+🔄 indexing
+🔄 variant calling
+🔄 vcf cleaning
+🔄 collecting snps
+🔄 collecting indels
+103147 results/variants/3_snps.txt
+275 results/variants/3_indels.txt
+total time taken: 11min 12s
+waiting 3 seconds before next genome .. 
+
+============================================
+	PROCESSING: 4, ERR434272
+============================================
+🔄 downloading pairwize 1
+🔄 downloading pairwize 2
+🔄 decompressing

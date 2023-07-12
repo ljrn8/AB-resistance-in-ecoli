@@ -50,7 +50,7 @@ if __name__ =="__main__":
         print("⚠️ overwriting files '-o'")
 
     print("this script downloads all genomes and may take few hours. \
-        \nif you have cloned this repo and curious about its function, make sure to not ever run multiple instances of this program at once")
+        \nif you have cloned this repo and curious about its function, be aware this is not for general use.")
     x = input("Are you sure you want to proceed [Y/N]: ")
     if x in ['y', 'Y']:
         main(overwrite=overwrite)
