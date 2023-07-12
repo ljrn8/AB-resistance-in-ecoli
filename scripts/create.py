@@ -5,8 +5,6 @@ from datetime import datetime
 import os, sys
 
 # TODO can be done with 3 threads
-# look at AWS genomics & azure
-# multi threading
 # 2118482 A C,G
 
 
@@ -19,12 +17,8 @@ def main(
     df = pd.read_csv("../accessions.csv")
     log_file = f"../logs/{now_str}_log.txt"
     
-    
-    # just do 5 for now
     for i in indexes:
         accession = df["Lane.accession"].iloc[i]
-        # TODO phenotypes
-        # TODO time
 
         # genome setup script
         exit_code = subprocess.call(f' \
@@ -42,18 +36,33 @@ def main(
             return
         
 
+from argparse import ArgumentParser
 
 if __name__ =="__main__":
 
-    overwrite = "-o" in sys.argv
+    # index flags
+    parser = ArgumentParser()
+    parser.add_argument("-s", "--start", default=0, type=int, help="starting index")
+    parser.add_argument("-e", "--ending", default=5, type=int, help="ending index (exclusive)")
+    parser.add_argument("-o","--overwrite",action="store_true", help="overwrite all files") 
+    
+    args = vars(parser.parse_args()) 
+    start, end = args["start"], args["ending"]
+    if start > end:
+        raise ValueError("irrational index range")
+
+    overwrite = args["overwrite"]
     if overwrite:
         print("⚠️ overwriting files '-o'")
 
-    print("this script downloads all genomes and may take few hours. \
+    index_range = range(start, end)
+    print(f'(using index range {index_range}')
+
+    print("\nthis script downloads all genomes and may take few hours. \
         \nif you have cloned this repo and curious about its function, make sure to not ever run multiple instances of this program at once")
     x = input("Are you sure you want to proceed [Y/N]: ")
     if x in ['y', 'Y']:
-        main(overwrite=overwrite)
+        main(overwrite=overwrite, indexes=index_range)
     else:
         print("execution cancelled")
 

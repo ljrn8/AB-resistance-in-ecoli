@@ -36,9 +36,10 @@ printf "\n============================================\n"
 printf "\tPROCESSING: ${i}, ${ACCESSION}\n"
 printf "============================================\n"
 
+
 ### DOWNLOADING ###
 cd raw_data
-if [[ -f ${ACCESSION}_1.fastq ]] && [[ -f ${ACCESSION}_2.fastq ]] && [[ "$OVERWRITE" = "False" ]]; then
+if [[ -f ${ACCESSION}_1.fastq ]] && [[ -f ${ACCESSION}_2.fastq ]] && [[ "$OVERWRITE" == "False" ]]; then
     echo "⚠️ fastq files ${ACCESSION}_x.fastq already exist, skipping .."
 else
     echo "🔄 downloading pairwize 1 [${i}]"
@@ -54,7 +55,7 @@ cd ..
 if [[ -f "results/${i}.bam" ]] && \ 
     [[ -f "results/${i}_sorted.bam" ]] && \ 
     [[ -f "results/${i}_sorted.bam.bai" ]] && \
-    [[ "$OVERWRITE" = "False" ]]; then 
+    [[ "$OVERWRITE" == "False" ]]; then 
     echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
 else
     echo "🔄 aligning [${i}]"
@@ -71,7 +72,7 @@ else
 fi
 
 ### VARIANT CALLING ###
-if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" = "False" ]]; then 
+if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" == "False" ]]; then 
     echo "⚠️ variant calls already exist for ${i}_calls.vcf.gz, skipping .."
 else
     echo "🔄 variant calling [${i}]"
