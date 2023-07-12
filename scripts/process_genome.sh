@@ -33,10 +33,11 @@ printf "\n============================================\n"
 printf "\tPROCESSING: ${i}, ${accession}\n"
 printf "============================================\n"
 
+
 ### DOWNLOADING ###
 cd raw_data
-if [[ -f ${accession}_1.fastq ]] && [[ -f ${accession}_2.fastq ]] && [[ "$overwrite" = "False" ]]; then
-    echo "⚠️ fastq files ${accession}_x.fastq already exist, skipping .."
+if [[ -f ${ACCESSION}_1.fastq ]] && [[ -f ${ACCESSION}_2.fastq ]] && [[ "$OVERWRITE" == "False" ]]; then
+    echo "⚠️ fastq files ${ACCESSION}_x.fastq already exist, skipping .."
 else
     echo "🔄 downloading pairwize 1 [${i}]"
     time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_1.fastq.gz
@@ -51,7 +52,7 @@ cd ..
 if [[ -f "results/${i}.bam" ]] && \ 
     [[ -f "results/${i}_sorted.bam" ]] && \ 
     [[ -f "results/${i}_sorted.bam.bai" ]] && \
-    [[ "$overwrite" = "False" ]]; then 
+    [[ "$OVERWRITE" == "False" ]]; then 
     echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
 else
     echo "🔄 aligning [${i}]"
@@ -68,7 +69,7 @@ else
 fi
 
 ### VARIANT CALLING ###
-if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$overwrite" = "False" ]]; then 
+if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" == "False" ]]; then 
     echo "⚠️ variant calls already exist for ${i}_calls.vcf.gz, skipping .."
 else
     echo "🔄 variant calling [${i}]"
