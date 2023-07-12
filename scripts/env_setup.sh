@@ -7,6 +7,6 @@ sudo apt install samtools
 sudo apt install bcftools
 
 cp env_setup /etc/systemd/system/
-sudo systemctl enable ecoli.service 
+echo "run sudo systemctl enable ecoli.service 
 sudo systemctl start ecoli.service
-sudo systemctl status ecoli.service
+sudo systemctl status ecoli.service"
