@@ -1,0 +1,9 @@
+⚠️ results/variants/0_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/1_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/2_snps.txt already exists, skipping this genome ..
+⚠️ results/variants/3_snps.txt already exists, skipping this genome ..
+
+============================================
+	PROCESSING: 4, ERR434272
+============================================
+🔄 downloading pairwize 1 [4]
