@@ -4,8 +4,8 @@ After=multi-user.target
 
 [Service]
 WorkingDirectory=/home/ubuntu/AB-resistance-in-ecoli/scripts/
-# add flags (-s 0 -e 531 -y)
-ExecStart=python3 /home/ubuntu/AB-resistance-in-ecoli/scripts/create.py 
+# change flags (-s 0 -e 531 -y)
+ExecStart=python3 /home/ubuntu/AB-resistance-in-ecoli/scripts/create.py -s 0 -e 531 -y
 RestartSec=10 
 StandardOutput=syslog
 StandardError=syslog 

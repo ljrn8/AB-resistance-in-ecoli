@@ -56,7 +56,8 @@ if [[ -f "results/${i}.bam" ]] && \
     echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
 else
     echo "🔄 aligning [${i}]"
-    time bwa mem -M -t 2 \
+    # -t 2
+    time bwa mem -M \  
         reference_data/ecoli_reference_k12 \
         raw_data/${accession}_2.fastq raw_data/${accession}_1.fastq \
         | samtools view -bS > results/${i}.bam;
