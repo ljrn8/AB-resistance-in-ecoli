@@ -68,7 +68,8 @@ else
 	ls -l raw_data
 
 	echo "🔄 sorting [${i}]"
-    time samtools sort results/${i}.bam -O bam -o results/${i}_sorted.bam
+    # maximum 1G memory to prevent OOM?
+    time samtools sort -m 1G results/${i}.bam -O bam -o results/${i}_sorted.bam
 	
     echo "🔄 indexing [${i}]"
     time samtools index results/${i}_sorted.bam
