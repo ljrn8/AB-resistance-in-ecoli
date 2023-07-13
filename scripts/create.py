@@ -1,11 +1,24 @@
 import subprocess
 import pandas as pd
-import time 
 from datetime import datetime
-import os, sys
+from argparse import ArgumentParser
+import os, subprocess
 
-# TODO can be done with maximum 3 threads
-# 2118482 A C,G
+# 
+# create.py [-h] [-s START] [-e ENDING] [-o] [-y]
+#
+# Desciption: Downloads and preprocesses all genomes from ascessions.csv
+# Auther: Joel Hoefs 
+# Date: July 2023
+#   
+# optional arguments:
+#   -h, --help                      show this help message and exit
+#   -s START, --start START         starting index of csv file
+#   -e ENDING, --ending ENDING      ending index (exclusive) of csv file
+#   -o, --overwrite                 overwrite all files
+#   -y, --yes                       skip yessing
+#
+#
 
 def main(
     overwrite=False,
@@ -31,15 +44,13 @@ def main(
         
         snp_file = f'../results/variants/{i}_snps.txt'
         if not os.path.exists(snp_file):
-            print(f"snp file [{i}_snps] doesnt exists, assuming error")
+            print(f"snp file [{i}_snps] doesnt exists after script, assuming error")
             return
         
 
-from argparse import ArgumentParser
 
 if __name__ =="__main__":
 
-    # index flags
     parser = ArgumentParser()
     parser.add_argument("-s", "--start", default=0, type=int, help="starting index")
     parser.add_argument("-e", "--ending", default=5, type=int, help="ending index (exclusive)")
@@ -59,7 +70,7 @@ if __name__ =="__main__":
     print(f'(using index range {index_range}')
 
     print("\nthis script downloads all genomes and may take few hours. \
-        \nif you have cloned this repo and curious about its function, make sure to not ever run multiple instances of this program at once")
+        \nif you have cloned this repo and curious about its function, be aware that it is not for general use")
     
     if not args["yes"]: 
         x = input("Are you sure you want to proceed [Y/N]: ")

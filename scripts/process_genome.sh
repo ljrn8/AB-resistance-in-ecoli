@@ -1,18 +1,17 @@
 #!/bin/bash
 
-#############################################################################
-# Script Name:  process_genome <accession> <id> <overwrite?> <log_file>      #
-# Author:       Joel Hoefs .July 2023                                       #
-# Description:  Downloads, prepares and gathers                             #
-#               a single e.coli genome's variants into results/variants.    #
-#               Designed only to be used through associated python script   #
-#############################################################################
-
-# special bash variable
-SECONDS=0
+#
+# process_genome <accession> <id> <overwrite?> <log_file>     
+# 
+# Author:       Joel Hoefs .July 2023                                       
+# Description:  Downloads, prepares and gathers                             
+#               a single e.coli genome's variants into results/variants.    
+#               Designed only to be used through associated python script   
+#
 
 cd ..
 
+SECONDS=0
 accession=$1
 i=$2
 overwrite=$3
@@ -62,16 +61,18 @@ else
         raw_data/${accession}_2.fastq raw_data/${accession}_1.fastq \
         | samtools view -bS > results/${i}.bam;
 
-    echo "🔄 sorting [${i}]"
-    time samtools sort results/${i}.bam -O bam -o results/${i}_sorted.bam
 
+	rm raw_data/${accession}*
+	echo "⚠️ fastq  files removed, raw_data folder: "
+	ls -l raw_data
+
+	echo "🔄 sorting [${i}]"
+    time samtools sort results/${i}.bam -O bam -o results/${i}_sorted.bam
+	
     echo "🔄 indexing [${i}]"
     time samtools index results/${i}_sorted.bam
 fi
 
-rm raw_data/${accession}*
-echo "⚠️ fastq raw data shoule be removed, looking at fastq: "
-ls -l raw_data
 
 ### VARIANT CALLING ###
 if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" == "False" ]]; then 
@@ -96,10 +97,10 @@ time bcftools query "-i" 'TYPE="INDEL"' -f '%POS %REF %ALT %QUAL\n' results/${i}
 wc -l $snp_file;
 wc -l $indel_file;
 
-echo "total time taken: $(($SECONDS / 60))min $(($SECONDS % 60))s"
-
 rm raw_data/${accession}*
 rm results/${i}*
+
+echo "total time taken: $(($SECONDS / 60))min $(($SECONDS % 60))s"
 
 printf "waiting 3 seconds before next genome .. \n";
 sleep 3
