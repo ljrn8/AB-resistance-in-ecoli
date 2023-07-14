@@ -9,6 +9,8 @@
 #               Designed only to be used through associated python script   
 #
 
+# TODO LOWERCASE
+
 cd ..
 
 SECONDS=0
@@ -35,13 +37,13 @@ printf "============================================\n"
 
 ### DOWNLOADING ###
 cd raw_data
-if [[ -f ${ACCESSION}_1.fastq ]] && [[ -f ${ACCESSION}_2.fastq ]] && [[ "$OVERWRITE" == "False" ]]; then
-    echo "⚠️ fastq files ${ACCESSION}_x.fastq already exist, skipping .."
+if [[ -f ${accession}_1.fastq ]] && [[ -f ${accession}_2.fastq ]] && [[ "$overwrite" == "False" ]]; then
+    echo "⚠️ fastq files ${accession}_x.fastq already exist, skipping .."
 else
     echo "🔄 downloading pairwize 1 [${i}]"
-    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_1.fastq.gz
+    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_1.fastq.gz >/dev/null 2>&1
     echo "🔄 downloading pairwize 2 [${i}]"
-    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_2.fastq.gz
+    time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_2.fastq.gz >/dev/null 2>&1
     echo "🔄 decompressing [${i}]"
     time yes n | gzip -d * 
 fi
@@ -49,35 +51,31 @@ cd ..
 
 
 ### ALINGMENT ###
-if [[ -f "results/${i}.bam" ]] && \ 
-    [[ -f "results/${i}_sorted.bam" ]] && \ 
-    [[ -f "results/${i}_sorted.bam.bai" ]] && \
-    [[ "$OVERWRITE" == "False" ]]; then 
-    echo "⚠️ alingmnet/sorted/indexed files for ${i}.bam already exists, skipping .."
+if [[ -f "results/${i}.bam" ]] && [[ "$overwrite" == "False" ]]; then 
+    echo "⚠️ alingmnet file for ${i}.bam already exists, skipping alingemnt .."
 else
     echo "🔄 aligning [${i}]"
-    # -t 2
-    time bwa mem -M \  
+    time bwa mem -M -t 1 \
         reference_data/ecoli_reference_k12 \
         raw_data/${accession}_2.fastq raw_data/${accession}_1.fastq \
         | samtools view -bS > results/${i}.bam;
-
-
-	rm raw_data/${accession}*
-	echo "⚠️ fastq  files removed, raw_data folder: "
-	ls -l raw_data
-
-	echo "🔄 sorting [${i}]"
-    # maximum 1G memory to prevent OOM?
-    time samtools sort -m 1G results/${i}.bam -O bam -o results/${i}_sorted.bam
-	
-    echo "🔄 indexing [${i}]"
-    time samtools index results/${i}_sorted.bam
 fi
+
+rm raw_data/${accession}*
+echo "⚠️ fastq  files removed, raw_data folder: "
+ls -l raw_data
+
+echo "🔄 sorting [${i}]"
+# restrict to only 1G of memory to prevent OOM?
+time samtools sort -m 1G results/${i}.bam -O bam -o results/${i}_sorted.bam
+
+echo "🔄 indexing [${i}]"
+time samtools index results/${i}_sorted.bam
+
 
 
 ### VARIANT CALLING ###
-if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$OVERWRITE" == "False" ]]; then 
+if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$overwrite" == "False" ]]; then 
     echo "⚠️ variant calls already exist for ${i}_calls.vcf.gz, skipping .."
 else
     echo "🔄 variant calling [${i}]"
