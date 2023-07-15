@@ -39,13 +39,11 @@ def main(
             shell=True  
         )
         if exit_code != 0:
-            print(f"non zero exit code from sub process {i}")
-            return 
+            raise Exception(f"non zero exit code from sub process {i}")
         
         snp_file = f'../results/variants/{i}_snps.txt'
         if not os.path.exists(snp_file):
-            print(f"snp file [{i}_snps] doesnt exists after script, assuming error")
-            return
+            raise Exception(f"snp file [{i}_snps] doesnt exists after script, assuming error")
         
 
 

@@ -9,7 +9,8 @@
 #               Designed only to be used through associated python script   
 #
 
-# TODO LOWERCASE
+# immediantly exit the script when any command fails
+set -e
 
 cd ..
 
@@ -45,7 +46,7 @@ else
     echo "🔄 downloading pairwize 2 [${i}]"
     time wget -nc ftp://ftp.sra.ebi.ac.uk/vol1/fastq/${short}/${accession}/${accession}_2.fastq.gz >/dev/null 2>&1
     echo "🔄 decompressing [${i}]"
-    time yes n | gzip -d * 
+    time yes n | gzip -d ${accession}_1.fastq.gz ${accession}_2.fastq.gz
 fi
 cd ..
 
@@ -55,7 +56,7 @@ if [[ -f "results/${i}.bam" ]] && [[ "$overwrite" == "False" ]]; then
     echo "⚠️ alingmnet file for ${i}.bam already exists, skipping alingemnt .."
 else
     echo "🔄 aligning [${i}]"
-    time bwa mem -M -t 1 \
+    time bwa mem -M -t 2 \
         reference_data/ecoli_reference_k12 \
         raw_data/${accession}_2.fastq raw_data/${accession}_1.fastq \
         | samtools view -bS > results/${i}.bam;
@@ -66,13 +67,10 @@ echo "⚠️ fastq  files removed, raw_data folder: "
 ls -l raw_data
 
 echo "🔄 sorting [${i}]"
-# restrict to only 1G of memory to prevent OOM?
-time samtools sort -m 1G results/${i}.bam -O bam -o results/${i}_sorted.bam
+time samtools sort -m 100M results/${i}.bam -O bam -o results/${i}_sorted.bam
 
 echo "🔄 indexing [${i}]"
 time samtools index results/${i}_sorted.bam
-
-
 
 ### VARIANT CALLING ###
 if [[ -f "results/${i}_calls.vcf.gz" ]] && [[ "$overwrite" == "False" ]]; then 
@@ -97,7 +95,6 @@ time bcftools query "-i" 'TYPE="INDEL"' -f '%POS %REF %ALT %QUAL\n' results/${i}
 wc -l $snp_file;
 wc -l $indel_file;
 
-rm raw_data/${accession}*
 rm results/${i}*
 
 echo "total time taken: $(($SECONDS / 60))min $(($SECONDS % 60))s"
