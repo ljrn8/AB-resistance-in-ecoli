@@ -7,8 +7,8 @@ WorkingDirectory=/home/ubuntu/AB-resistance-in-ecoli/scripts/
 # change flags (-s 0 -e 531 -y)
 ExecStart=python3 /home/ubuntu/AB-resistance-in-ecoli/scripts/create.py -s 0 -e 531 -y
 RestartSec=10 
-StandardOutput=file:/home/ubuntu/AB-resistance-in-ecoli/service/daemon_log
-StandardError=file:/home/ubuntu/AB-resistance-in-ecoli/service/daemon_log
+StandardOutput=file:/home/ubuntu/AB-resistance-in-ecoli/daemon/log
+StandardError=file:/home/ubuntu/AB-resistance-in-ecoli/daemon/log
 SyslogIdentifier=ecoli
 User=ubuntu
 
