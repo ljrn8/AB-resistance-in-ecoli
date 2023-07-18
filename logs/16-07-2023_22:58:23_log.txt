@@ -1,0 +1,6 @@
+
+============================================
+	PROCESSING: 0, ERR434268
+============================================
+⚠️ fastq files ERR434268_x.fastq already exist, skipping ..
+🔄 aligning [0]

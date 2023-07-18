@@ -1,16 +1,17 @@
 #!/bin/bash
 
 #
-# process_genome <accession> <id> <overwrite?> <log_file>     
+# process_genome <accession> <id> <overwrite?> <stdout>     
 # 
 # Author:       Joel Hoefs .July 2023                                       
 # Description:  Downloads, prepares and gathers                             
-#               a single e.coli genome's variants into results/variants.    
+#               a single e.coli genome's snps and indels into results/variants.    
 #               Designed only to be used through associated python script   
 #
 
 # immediantly exit the script when any command fails
 set -e
+date
 
 cd ..
 
@@ -56,7 +57,7 @@ if [[ -f "results/${i}.bam" ]] && [[ "$overwrite" == "False" ]]; then
     echo "⚠️ alingmnet file for ${i}.bam already exists, skipping alingemnt .."
 else
     echo "🔄 aligning [${i}]"
-    time bwa mem -M -t 2 \
+    time bwa mem -M -t 3 \
         reference_data/ecoli_reference_k12 \
         raw_data/${accession}_2.fastq raw_data/${accession}_1.fastq \
         | samtools view -bS > results/${i}.bam;
@@ -67,7 +68,7 @@ echo "⚠️ fastq  files removed, raw_data folder: "
 ls -l raw_data
 
 echo "🔄 sorting [${i}]"
-time samtools sort -m 100M results/${i}.bam -O bam -o results/${i}_sorted.bam
+time samtools sort -m 300M results/${i}.bam -O bam -o results/${i}_sorted.bam
 
 echo "🔄 indexing [${i}]"
 time samtools index results/${i}_sorted.bam
