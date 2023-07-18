@@ -62,7 +62,7 @@ else
         | samtools view -bS > results/${i}.bam;
 fi
 
-rm raw_data/${accession}*
+# rm raw_data/${accession}*
 echo "⚠️ fastq  files removed, raw_data folder: "
 ls -l raw_data
 
