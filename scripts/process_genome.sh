@@ -9,10 +9,8 @@
 #               Designed only to be used through associated python script   
 #
 
-# immediantly exit the script when any command fails
 set -e
 date
-
 cd ..
 
 SECONDS=0
@@ -63,7 +61,7 @@ else
         | samtools view -bS > results/${i}.bam;
 fi
 
-# rm raw_data/${accession}*
+rm raw_data/${accession}*
 echo "⚠️ fastq  files removed, raw_data folder: "
 ls -l raw_data
 
