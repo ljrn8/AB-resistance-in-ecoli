@@ -5,58 +5,30 @@ import pickle
 import heapq
 import pickle
 
-def get_loci(only_snps=True):
-    
-    # hashable check ? 
-    unique_set = set()
-    loci = []
 
-    # do 1 pass first 
-    with open("../dataset/0_snps.txt", "r") as f:
-        loci = list(np.loadtxt(f, dtype=int, usecols=(0,)))
-        print('should look like this: ', np.array(loci))
-        
+def get_hashmap():
+    snp_hash = {}
+
     for count, file in enumerate(os.scandir("../dataset")):
         genome_id, variant_type = file.name.rstrip(".txt").split("_")
         
-        if only_snps and variant_type != 'snps':
+        if variant_type != 'snps':
             continue
         
-        if count % 20 == 0:
-            # only reflects snp count
-            print(f'\n{count/2}/1508: ', loci[:10], loci[-10:-1], len(loci))
-        
         with open("../dataset/" + file.name, "r") as f:
-        
-            burst = list(np.loadtxt(f, dtype=int, usecols=(0,)))
-
-            # extract only unqiue loci
-            common_set = unique_set.intersection(burst)
-            unique_snps = list(set(burst) - common_set)                 
             
-            print(len(unique_snps), ", ", end="")
-                
-            for snp in unique_snps:
-                unique_set.add(snp)
-                
-            loci.extend(unique_snps)
+            for row in f:
 
-            # Convert the extended array into a min-heap
-            heapq.heapify(loci)
+                # TODO numpy call
+                position = 
+
+                if position in snp_hash:
+                    continue 
+                else:
+                    snp_hash[position] = np.array(1508)
             
-    with open("../results/positions", "wb") as loci_file:
-        pickle.dump(loci, loci_file)
-        
 
 
-def sort_heap(heap_file="../results/loci"):
-    with open(heap_file, "rb") as loci_file:
-        loci_heap = pickle.load(loci_file)
-        
-    loci = [heapq.heappop(loci_heap) for i in range(len(loci_heap))]
-    with open("../results/positions_sorted", "wb") as loci_file:
-        pickle.dump(loci, loci_file)
-    
 
 def view_matrix(snp_matrix):
     i = 0
