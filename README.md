@@ -2,7 +2,8 @@
 Snp calling pipeline for predicting Antibiotic resistance in E.coli from SNP's. Below is a description of the folder strucuture. 
 To see the main results and code I recomend referring to "EDA and ML"/TODO or "Variant calling pipeline"/Scripts
 
-
+## TODO
+- add final notebook and change to links + add diagrams to README
 
 
 ## EDA and ML
