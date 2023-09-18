@@ -20,7 +20,7 @@ def get_hashmap():
             for row in f:
 
                 # TODO numpy call
-                position = 
+                position = None 
 
                 if position in snp_hash:
                     continue 
@@ -73,13 +73,11 @@ def generate_snp_matrix():
             view_matrix(snp_matrix)
         
         with open("../dataset/" + file.name, "r") as f:
-            
-            X = list(np.loadtxt(f, dtype=int, usecols=(0, 2),
+            X = np.loadtxt(f, dtype=int, usecols=(0, 2),
                 converters={
                     2: lambda x: tokenize[x]
                 }
-            ))
-
+            )
             # hash for snp
             for position, snp in X:
                 snp_matrix[position][count] = tokenize[snp]
