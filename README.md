@@ -18,7 +18,7 @@ To see the main results and code I recommend referring to **model_iteration.ipyn
 ### EDA and ML
 Contains expolatory data anaylises and model iterations + evaluations
 
-- **model_iteration.ipynb - final SNP Ecoli preprocessing, model iteration & evaluation of ABR in 1000 ecoli genomes**
+- **model_iteration.ipynb - final SNP Ecoli preprocessing, model iteration & evaluation**
 - ab_resistance_genes.ipynb - proof of concept of supervised machine learning in gene classification 
 - Nigeria_Antibiotic_Susceptibility.ipynb - initial EDA task of ABR in Nigeria
 
