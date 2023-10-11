@@ -18,9 +18,9 @@ To see the main results and code I recommend referring to **model_iteration.ipyn
 ### EDA and ML
 Contains expolatory data anaylises and model iterations + evaluations
 
-- **model_iteration.ipynb final SNP Ecoli preprocessing, model iteration & evaluation of ABR in 1000 ecoli genomes**
+- **model_iteration.ipynb - final SNP Ecoli preprocessing, model iteration & evaluation of ABR in 1000 ecoli genomes**
 - ab_resistance_genes.ipynb - proof of concept of supervised machine learning in gene classification 
-- Nigeria_Antibiotic_Susceptibility.ipynb - initial EDA task of ABR in nigeria
+- Nigeria_Antibiotic_Susceptibility.ipynb - initial EDA task of ABR in Nigeria
 
 
 
@@ -30,7 +30,7 @@ Contains the initial (unused) genome preprocessing pipeline for aws use.
 - Deamon - AWS service running and diagnosis files
 - Logs - logging for standard output 
 - Reference_data - reference genome fasta and index files
-- Raw_data - end point for raw downlaoded fastq par end reads
+- Raw_data - end point for raw downloaded fastq par end reads
 - Results - bam, vcf and sorted, indexed files during preprocessing
     Variants - resultant snp and indel calls per genome
 - **Scripts - python / bash scripts**
